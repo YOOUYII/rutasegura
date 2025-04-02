@@ -3,8 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
-
-console.log(process.env.REACT_APP_API_URL);
+console.log("API URL configurada:", REACT_APP_API_URL);
 
 function Login({ setIsLoggedIn }) {
   const [formData, setFormData] = useState({ username: "", password: "" });
@@ -62,7 +61,7 @@ function Login({ setIsLoggedIn }) {
           icon: "success",
           title: "¡Bienvenido!",
           text: "Inicio de sesión exitoso.",
-          timer: 2000, // Aumentamos el tiempo para que sea más visible
+          timer: 2000,
           showConfirmButton: false,
         }).then(() => {
           localStorage.setItem("userSession", JSON.stringify(data));
@@ -95,6 +94,7 @@ function Login({ setIsLoggedIn }) {
 
   const handleGoogleLogin = () => {
     console.log("Iniciando autenticación con Google...");
+    console.log("Redirigiendo a:", `${REACT_APP_API_URL}/auth/google`);
     window.location.href = `${REACT_APP_API_URL}/auth/google`;
   };
 
@@ -125,12 +125,11 @@ function Login({ setIsLoggedIn }) {
           icon: "success",
           title: "¡Bienvenido!",
           text: "Inicio de sesión con Google exitoso.",
-          timer: 2000, // Aumentamos el tiempo para que sea más visible
+          timer: 2000,
           showConfirmButton: false,
         }).then(() => {
           localStorage.setItem("userSession", JSON.stringify(userData));
           setIsLoggedIn(true);
-          console.log("isLoggedIn establecido a true, redirigiendo a /");
           navigate("/", { replace: true });
         });
       } catch (error) {
@@ -143,8 +142,6 @@ function Login({ setIsLoggedIn }) {
         });
         navigate("/login", { replace: true });
       }
-    } else {
-      console.log("No se encontró parámetro 'user' ni 'error' en la URL o ya existe una sesión");
     }
   }, [setIsLoggedIn, navigate, location.search]);
 
